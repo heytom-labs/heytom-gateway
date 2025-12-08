@@ -1,0 +1,68 @@
+{
+    "go.useLanguageServer": true,
+    "go.lintTool": "golangci-lint",
+    "go.lintOnSave": "package",
+    "go.formatTool": "goimports",
+    "go.buildOnSave": "off",
+    "go.testOnSave": false,
+    "go.coverOnSave": false,
+    "go.vetOnSave": "off",
+    "go.buildFlags": [
+        "-gcflags=all=-N -l"
+    ],
+    "go.testFlags": [
+        "-v",
+        "-gcflags=all=-N -l"
+    ],
+    "go.testTimeout": "30s",
+    "go.toolsManagement.autoUpdate": true,
+    "go.delveConfig": {
+        "dlvLoadConfig": {
+            "followPointers": true,
+            "maxVariableRecurse": 3,
+            "maxStringLen": 1024,
+            "maxArrayValues": 128,
+            "maxStructFields": -1
+        },
+        "apiVersion": 2,
+        "showGlobalVariables": true,
+        "showRegisters": false,
+        "substitutePath": []
+    },
+    "[go]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+    "[go.mod]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+    "gopls": {
+        "ui.semanticTokens": true,
+        "ui.completion.usePlaceholders": true,
+        "ui.diagnostic.analyses": {
+            "unusedparams": true,
+            "shadow": true
+        },
+        "formatting.gofumpt": true,
+        "build.buildFlags": [
+            "-gcflags=all=-N -l"
+        ]
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/bin": true
+    },
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true,
+        "**/bin/**": true,
+        "**/vendor/**": true
+    }
+}

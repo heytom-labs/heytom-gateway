@@ -1,0 +1,17 @@
+{
+  "server": {
+    "http_port": ":8080",
+    "grpc_port": ":9091",
+    "host": "192.168.2.134"
+  },
+  "registry": {
+    "enabled": true,
+    "type": "consul",
+    "address": "127.0.0.1:8500",
+    "service_name": "heytom-gateway",
+    "service_id": "heytom-gateway-1",
+    "tags": ["gateway", "api"],
+    "health_check_timeout": 5000000000,
+    "health_check_ttl": 15000000000
+  }
+}

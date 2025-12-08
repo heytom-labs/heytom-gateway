@@ -1,0 +1,181 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "go: build",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "build",
+                "-v",
+                "-o",
+                "bin/gateway",
+                "./cmd/gateway"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$go"
+        },
+        {
+            "label": "go: run",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "run",
+                "./cmd/gateway"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$go"
+        },
+        {
+            "label": "go: test",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "test",
+                "-v",
+                "./..."
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$go"
+        },
+        {
+            "label": "go: test with coverage",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "test",
+                "-v",
+                "-coverprofile=coverage.out",
+                "./..."
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$go"
+        },
+        {
+            "label": "go: mod tidy",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "mod",
+                "tidy"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "wire: generate",
+            "type": "shell",
+            "command": "wire",
+            "args": [
+                "./cmd/gateway"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "docker: start consul",
+            "type": "shell",
+            "command": "docker-compose",
+            "args": [
+                "-f",
+                "examples/consul/docker-compose.yml",
+                "up",
+                "-d"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "docker: stop consul",
+            "type": "shell",
+            "command": "docker-compose",
+            "args": [
+                "-f",
+                "examples/consul/docker-compose.yml",
+                "down"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "make: build",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "build"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$go"
+        },
+        {
+            "label": "make: run",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "run"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$go"
+        },
+        {
+            "label": "make: clean",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "clean"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

@@ -1,0 +1,113 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Gateway",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/gateway",
+            "args": [],
+            "env": {},
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "buildFlags": "-gcflags=all=-N ",
+            "showLog": true,
+            "trace": "verbose",
+            "dlvFlags": [
+                "--check-go-version=false"
+            ]
+        },
+        {
+            "name": "Launch Gateway (No Registry)",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/gateway",
+            "args": [],
+            "env": {
+                "REGISTRY_ENABLED": "false"
+            },
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "buildFlags": "-gcflags=all=-N -l",
+            "showLog": true
+        },
+        {
+            "name": "Launch Service Discovery Example",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/examples/service-discovery",
+            "args": [],
+            "env": {},
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "buildFlags": "-gcflags=all=-N -l",
+            "showLog": true
+        },
+        {
+            "name": "Launch Backend Service Example",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/examples/backend-service",
+            "args": [],
+            "env": {},
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "buildFlags": "-gcflags=all=-N -l",
+            "showLog": true
+        },
+        {
+            "name": "Attach to Process",
+            "type": "go",
+            "request": "attach",
+            "mode": "local",
+            "processId": 0
+        },
+        {
+            "name": "Debug Current File",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "buildFlags": "-gcflags=all=-N -l",
+            "showLog": true
+        },
+        {
+            "name": "Debug Tests",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${workspaceFolder}",
+            "args": [
+                "-test.v"
+            ],
+            "console": "integratedTerminal",
+            "buildFlags": "-gcflags=all=-N -l",
+            "showLog": true
+        },
+        {
+            "name": "Debug Current Test",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${fileDirname}",
+            "console": "integratedTerminal",
+            "buildFlags": "-gcflags=all=-N -l",
+            "showLog": true
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Gateway + Service Discovery",
+            "configurations": [
+                "Launch Gateway",
+                "Launch Service Discovery Example"
+            ],
+            "stopAll": true
+        }
+    ]
+}
