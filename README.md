@@ -5,7 +5,7 @@
 [![Go Version](https://img.shields.io/badge/Go-1.25%2B-blue)](https://golang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-![img_v3_02sq_9669bb6b-6b99-48c4-a779-5859d6257f3g](https://github.com/user-attachments/assets/2ea598c1-84a5-4d62-aaa1-8677944ccedd)
+<img width="1888" height="1036" alt="image" src="https://github.com/user-attachments/assets/cf3f074f-fcbf-4e0d-83ff-07adbc67a616" />
 
 ## 核心特性
 
