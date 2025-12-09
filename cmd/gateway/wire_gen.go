@@ -13,22 +13,30 @@ import (
 	"github.com/heytom-labs/heytom-gateway/internal/server/http"
 )
 
+import (
+	_ "github.com/heytom-labs/heytom-gateway/internal/registry/consul"
+)
+
+// Injectors from wire.go:
+
 // InitializeApp 初始化应用程序
 func InitializeApp() (*App, error) {
-	cfg := config.ProvideConfig()
-	reg, err := registry.ProvideRegistry(cfg)
+	configConfig := config.ProvideConfig()
+	registryRegistry, err := registry.ProvideRegistry(configConfig)
 	if err != nil {
 		return nil, err
 	}
-	httpServer := http.ProvideServer(cfg)
-	grpcServer := grpc.ProvideServer(cfg, reg)
-
-	app := &App{
-		Config:     cfg,
-		HTTPServer: httpServer,
-		GRPCServer: grpcServer,
-		Registry:   reg,
+	httpProxy, err := http.ProvideHTTPProxy(configConfig, registryRegistry)
+	if err != nil {
+		return nil, err
 	}
-
+	server := http.ProvideServer(configConfig, httpProxy)
+	grpcServer := grpc.ProvideServer(configConfig, registryRegistry)
+	app := &App{
+		Config:     configConfig,
+		HTTPServer: server,
+		GRPCServer: grpcServer,
+		Registry:   registryRegistry,
+	}
 	return app, nil
 }

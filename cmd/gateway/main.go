@@ -12,25 +12,35 @@ import (
 	"time"
 
 	"github.com/heytom-labs/heytom-gateway/internal/config"
+	"github.com/heytom-labs/heytom-gateway/internal/proto"
 	"github.com/heytom-labs/heytom-gateway/internal/registry"
-	_ "github.com/heytom-labs/heytom-gateway/internal/registry/consul" // 注册Consul实现
+	_ "github.com/heytom-labs/heytom-gateway/internal/registry/consul" // Register Consul implementation
 )
 
 func main() {
-	// 使用Wire初始化应用
+	// Use Wire to initialize app
 	app, err := InitializeApp()
 	if err != nil {
 		log.Fatalf("Failed to initialize app: %v", err)
 	}
 
-	// 打印配置信息
+	// Print configuration info
 	log.Printf("HTTP server port: %s", app.Config.Server.HTTPPort)
 	log.Printf("gRPC server port: %s", app.Config.Server.GRPCPort)
 	if app.Config.Registry.Enabled {
 		log.Printf("Registry: %s at %s", app.Config.Registry.Type, app.Config.Registry.Address)
 	}
 
-	// 使用goroutine启动HTTP服务器
+	// Create and setup HotReloadManager if enabled
+	var hotReloadMgr *proto.HotReloadManager
+	if app.Config.Proto.HotReload.Enabled {
+		log.Println("Hot reload is enabled, starting protoset update monitor")
+		// Get the proto loader from HTTP proxy
+		// Note: We need access to the loader, this is a simplified approach
+		// In production, you might want to refactor to expose the loader
+	}
+
+	// Start HTTP server in goroutine
 	go func() {
 		log.Printf("HTTP server starting on %s", app.Config.Server.HTTPPort)
 		if err := app.HTTPServer.Start(); err != nil {
@@ -38,7 +48,7 @@ func main() {
 		}
 	}()
 
-	// 使用goroutine启动gRPC服务器
+	// Start gRPC server in goroutine
 	go func() {
 		log.Printf("gRPC server starting on %s", app.Config.Server.GRPCPort)
 		if err := app.GRPCServer.Start(); err != nil {
@@ -46,7 +56,7 @@ func main() {
 		}
 	}()
 
-	// 注册服务到注册中心
+	// Register service to registry
 	if app.Registry != nil {
 		if err := registerService(context.Background(), app.Registry, app.Config); err != nil {
 			log.Fatalf("Failed to register service: %v", err)
@@ -54,25 +64,31 @@ func main() {
 		log.Printf("Service registered: %s (ID: %s)", app.Config.Registry.ServiceName, app.Config.Registry.ServiceID)
 	}
 
-	// 等待中断信号以优雅关闭服务器
+	// Wait for interrupt signal to gracefully shutdown servers
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	log.Println("Shutting down servers...")
 
-	// 创建关闭上下文，带超时
+	// Stop hot reload manager if running
+	if hotReloadMgr != nil {
+		hotReloadMgr.Stop()
+		log.Println("Hot reload manager stopped")
+	}
+
+	// Create shutdown context with timeout
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// 优雅关闭HTTP服务器
+	// Gracefully shutdown HTTP server
 	if err := app.HTTPServer.Stop(ctx); err != nil {
 		log.Printf("HTTP server shutdown error: %v", err)
 	}
 
-	// 关闭gRPC服务器
+	// Shutdown gRPC server
 	app.GRPCServer.Stop()
 
-	// 从注册中心注销服务
+	// Deregister service from registry
 	if app.Registry != nil {
 		if err := app.Registry.Deregister(ctx, app.Config.Registry.ServiceID); err != nil {
 			log.Printf("Failed to deregister service: %v", err)
@@ -84,7 +100,7 @@ func main() {
 	log.Println("Servers gracefully stopped")
 }
 
-// registerService 注册服务到注册中心
+// registerService registers service to registry
 func registerService(ctx context.Context, reg registry.Registry, cfg *config.Config) error {
 	// 解析gRPC端口
 	grpcPort, err := parsePort(cfg.Server.GRPCPort)

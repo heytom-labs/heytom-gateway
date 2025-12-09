@@ -13,5 +13,30 @@
     "tags": ["gateway", "api"],
     "health_check_timeout": 5000000000,
     "health_check_ttl": 15000000000
+  },
+  "proto": {
+    "protoset_path": "./protos/descriptor.protoset",
+    "protosets": [
+      {
+        "service_name": "order",
+        "path": "./protos/order.protoset",
+        "url": ""
+      },
+      {
+        "service_name": "user",
+        "path": "./protos/user.protoset",
+        "url": ""
+      },
+      {
+        "service_name": "payment",
+        "path": "",
+        "url": "http://artifact-repo.example.com/payment/latest.protoset"
+      }
+    ],
+    "hot_reload": {
+      "enabled": true,
+      "check_period": 60,
+      "auth_token": "your-artifact-repo-token"
+    }
   }
 }
